@@ -50,7 +50,7 @@ public class GridManager {
         final double tmp = Math.min(siloDimensions.getX(),
                 siloDimensions.getY());
 
-        final int cellAmount = calculateCells(tmp, maxRadius);
+        final int cellAmount = calculateCells(tmp, Math.max(maxRadius, interactionRadius));
 
         this.siloDimensions = siloDimensions;
         this.opening = opening;
