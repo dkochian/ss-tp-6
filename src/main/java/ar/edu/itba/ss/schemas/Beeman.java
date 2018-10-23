@@ -30,7 +30,7 @@ public class Beeman extends Schema {
         final double dt = ioManager.getConfiguration().getDt();
 
         for (Particle particle : particleManager.getParticles()) {
-            if (particle.getId() != 0 || particle.getId() != 1)
+            if (particle.getId() != 0 && particle.getId() != 1)
                 updateParticle(particle, dt);
         }
 
@@ -57,7 +57,7 @@ public class Beeman extends Schema {
         Point<Double> velocityPrediction = new Point<>(particleVelocity.getX() + (3 / 2.0) * xActualAcceleration * dt - (1 / 2.0) * states.get(particle).getAcceleration().getX() * dt,
                 particleVelocity.getY() + (3 / 2.0) * yActualAcceleration * dt - (1 / 2.0) * states.get(particle).getAcceleration().getY() * dt);
 
-        Point<Double> newAcceleration = Particle.calculateAcceleration(particle, forcesManager.updateAndCalculateForces(particle, newPosition, velocityPrediction, particle.getNeighbours(), particle.getRadius(), particle.getMass()));
+        Point<Double> newAcceleration = Particle.calculateAcceleration(particle, forcesManager.updateAndCalculateForces(particle, newPosition, velocityPrediction));
 
         Point<Double> newVelocity = new Point<>(particleVelocity.getX() + (1 / 3.0) * newAcceleration.getX() * dt + (5 / 6.0) * xActualAcceleration * dt - (1 / 6.0) * states.get(particle).getAcceleration().getX() * dt,
                 particleVelocity.getY() + (1 / 3.0) * newAcceleration.getY() * dt + (5 / 6.0) * yActualAcceleration * dt - (1 / 6.0) * states.get(particle).getAcceleration().getY() * dt);

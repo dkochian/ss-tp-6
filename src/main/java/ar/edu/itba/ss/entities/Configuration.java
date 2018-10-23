@@ -6,6 +6,10 @@ import ar.edu.itba.ss.utils.other.Tuple;
 
 public class Configuration {
 
+    private static final double BOX_HEIGHT = 20D;
+    private static final double BOX_WIDTH = 20D;
+    private static final double BOX_OPENING = 1.2;
+
     //IO
     private final String outputDirectory;
     private final String outputSimulationFile;
@@ -25,21 +29,21 @@ public class Configuration {
     private final Point<Range<Double>> particleAcceleration;
     private final Range<Double> particleRadius;
     private final Range<Double> particleMass;
+    private final Range<Double> particleDesiredVelocity;
 
     //Simulation
     private final double dt;
-    private final double duration;
     private final double interactionRadius;
-    private final int insertionRetries;
 
     //Constants
-    private final double a;
-    private final double b;
     private final double kn;
     private final double kt;
     private final double mu;
     private final double gamma;
     private final double tolerance;
+    private final double a;
+    private final double b;
+    private final double T;
 
     //Animation
     private final double compress;
@@ -53,38 +57,44 @@ public class Configuration {
 
         //Input
         generateInput = true;
-        particleAmount = 800;
+        particleAmount = 200;
         maxIterations = 100;
 
         //General
         factor = 10D;
-        opening = new Tuple<>(2D, new Range<>(0.4 / 2 - 0.075, 0.15));
-        dimensions = new Point<>(0.4, opening.getKey() + opening.getKey() / factor);//FUll simulation dimensions: not silo dimensions
+        opening = new Tuple<>(BOX_HEIGHT, new Range<>(BOX_WIDTH / 2 - BOX_OPENING / 2, BOX_OPENING));
+        dimensions = new Point<>(BOX_WIDTH, opening.getKey() + opening.getKey() / factor);//FUll simulation dimensions: not silo dimensions
         particleVelocity = new Point<>(new Range<>(0D, 0D), new Range<>(0D, 0D));
         particleAcceleration = new Point<>(new Range<>(0D, 0D), new Range<>(0D, 0D));
-        particleRadius = new Range<>(0.01D, 0.005D); // m
-        particleMass = new Range<>(0.01, 0D); //kg
+        particleRadius = new Range<>(0.25, 0.04); // m
+        particleMass = new Range<>(80D, 0D); //kg
+        particleDesiredVelocity = new Range<>(0.8, 5.2);
 
         //Constants
-        kn = Math.pow(10, 5); //N/m
+        kn = 1.2 * Math.pow(10, 5); //N/m
         kt = 2 * kn;
         mu = 0.1;
         gamma = 100; //kg/s
         tolerance = 0.01;
-        a = 2000;
-        b = 0.8;
+        a = 2000; //N
+        b = 0.08; //m
+        T = 0.5; //s
 
         //Simulation
         dt = 5.1E-5;
-        duration = 5.0;
-        interactionRadius = 0.03;
-        insertionRetries = 10;
+        interactionRadius = 2 * (particleRadius.getBase() + particleRadius.getOffset());
 
         //Animation
         compress = 1.0E-2;
     }
 
-    public Configuration(String outputDirectory, String outputSimulationFile, String inputDirectory, String inputFilename, boolean generateInput, int particleAmount, int maxIterations, double factor, Point<Double> dimensions, Tuple<Double, Range<Double>> opening, Point<Range<Double>> particleVelocity, Point<Range<Double>> particleAcceleration, Range<Double> particleRadius, Range<Double> particleMass, double dt, double duration, double interactionRadius, int insertionRetries, double a, double b, double kn, double kt, double mu, double gamma, double tolerance, double compress) {
+    public Configuration(String outputDirectory, String outputSimulationFile, String inputDirectory,
+                         String inputFilename, boolean generateInput, int particleAmount, int maxIterations,
+                         double factor, Point<Double> dimensions, Tuple<Double, Range<Double>> opening,
+                         Point<Range<Double>> particleVelocity, Point<Range<Double>> particleAcceleration,
+                         Range<Double> particleRadius, Range<Double> particleMass, Range<Double> particleDesiredVelocity,
+                         double dt, double interactionRadius, double kn, double kt, double mu, double gamma,
+                         double tolerance, double a, double b, double t, double compress) {
         this.outputDirectory = outputDirectory;
         this.outputSimulationFile = outputSimulationFile;
         this.inputDirectory = inputDirectory;
@@ -99,18 +109,30 @@ public class Configuration {
         this.particleAcceleration = particleAcceleration;
         this.particleRadius = particleRadius;
         this.particleMass = particleMass;
+        this.particleDesiredVelocity = particleDesiredVelocity;
         this.dt = dt;
-        this.duration = duration;
         this.interactionRadius = interactionRadius;
-        this.insertionRetries = insertionRetries;
-        this.a = a;
-        this.b = b;
         this.kn = kn;
         this.kt = kt;
         this.mu = mu;
         this.gamma = gamma;
         this.tolerance = tolerance;
+        this.a = a;
+        this.b = b;
+        T = t;
         this.compress = compress;
+    }
+
+    public static double getBoxHeight() {
+        return BOX_HEIGHT;
+    }
+
+    public static double getBoxWidth() {
+        return BOX_WIDTH;
+    }
+
+    public static double getBoxOpening() {
+        return BOX_OPENING;
     }
 
     public String getOutputDirectory() {
@@ -169,28 +191,16 @@ public class Configuration {
         return particleMass;
     }
 
+    public Range<Double> getParticleDesiredVelocity() {
+        return particleDesiredVelocity;
+    }
+
     public double getDt() {
         return dt;
     }
 
-    public double getDuration() {
-        return duration;
-    }
-
     public double getInteractionRadius() {
         return interactionRadius;
-    }
-
-    public int getInsertionRetries() {
-        return insertionRetries;
-    }
-
-    public double getA() {
-        return a;
-    }
-
-    public double getB() {
-        return b;
     }
 
     public double getKn() {
@@ -211,6 +221,18 @@ public class Configuration {
 
     public double getTolerance() {
         return tolerance;
+    }
+
+    public double getA() {
+        return a;
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public double getT() {
+        return T;
     }
 
     public double getCompress() {

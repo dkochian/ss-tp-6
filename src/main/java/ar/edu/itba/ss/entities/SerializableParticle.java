@@ -6,12 +6,15 @@ public class SerializableParticle extends Particle {
 
     private boolean verified;
 
-    public SerializableParticle(int id, Point<Double> position, Point<Double> velocity, Point<Double> acceleration, double mass, double radius) {
-        this(id, position, velocity, acceleration, mass, radius, false);
+    public SerializableParticle(int id, Point<Double> position, Point<Double> velocity, Point<Double> acceleration,
+                                double mass, double radius, double desiredVelocity) {
+        this(id, position, velocity, acceleration, mass, radius, desiredVelocity, null, false);
     }
 
-    public SerializableParticle(int id, Point<Double> position, Point<Double> velocity, Point<Double> acceleration, double mass, double radius, boolean verified) {
-        super(id, position, velocity, acceleration, mass, radius);
+    public SerializableParticle(int id, Point<Double> position, Point<Double> velocity, Point<Double> acceleration,
+                                double mass, double radius, double desiredVelocity, Point<Double> goal,
+                                boolean verified) {
+        super(id, position, velocity, acceleration, mass, radius, desiredVelocity, goal);
         this.verified = verified;
     }
 

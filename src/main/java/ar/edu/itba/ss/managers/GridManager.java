@@ -205,9 +205,11 @@ public class GridManager {
 
             try {
                 final List<Particle> particleList = grid.getElement(pos.getX(), pos.getY());
-                for (final Particle particle : particleList)
-                    if (-(p.getRadius() + particle.getRadius()) + Particle.getDistance(p.getPosition(), particle.getPosition()) <= 0.0)
+                for (final Particle particle : particleList) {
+                    final double distance = -(p.getRadius() + particle.getRadius()) + Particle.getDistance(p.getPosition(), particle.getPosition());
+                    if (distance <= 0.0)
                         return false;
+                }
             } catch (final IndexOutOfBoundsException ignored) {
                 return false;
             }

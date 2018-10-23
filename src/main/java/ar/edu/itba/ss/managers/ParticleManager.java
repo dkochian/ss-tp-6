@@ -16,20 +16,20 @@ public class ParticleManager {
         return particles.add(p);
     }
 
-    boolean removeParticle(final Particle p) {
-        return particles.remove(p);
-    }
-
     public List<Particle> getParticles() {
         return Collections.unmodifiableList(particles);
     }
 
+    boolean removeParticle(final Particle p) {
+        return particles.remove(p);
+    }
+
     public void clearNeighbours() {
-        for (final Particle p : particles)
+        for(final Particle p : particles)
             p.clearNeighbours();
     }
 
-    void clear() {
+    void clear(){
         particles.clear();
     }
 

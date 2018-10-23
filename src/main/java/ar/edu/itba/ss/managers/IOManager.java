@@ -2,6 +2,8 @@ package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Configuration;
 import ar.edu.itba.ss.entities.InputData;
+import ar.edu.itba.ss.entities.Particle;
+import ar.edu.itba.ss.entities.SerializableParticle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;

@@ -43,18 +43,25 @@ public class SimulationManager {
                 ioManager.getConfiguration().getOpening().getKey());
 
         particleManager.addParticle(new Particle(0, position0, new Point<>(0.0,0.0), new Point<>(0.0,0.0),
-                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0));
+                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0, 0, null));
 
         particleManager.addParticle(new Particle(1, position1, new Point<>(0.0,0.0), new Point<>(0.0,0.0),
-                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0));
+                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0, 0, null));
 
         outputWriter.remove();
         outputWriter.removeKineticEnergyFile();
 
         logger.debug("Adding particles");
-        for (SerializableParticle p : ioManager.getInputData().getParticles())
-            particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
-                    p.getMass(), p.getRadius()));
+        for (SerializableParticle p : ioManager.getInputData().getParticles()) {
+            if (p.isVerified()) {
+                gridManager.addParticle(p, false);
+                particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
+                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), null));
+            } else {
+                gridManager.addParticle(p);
+                particleManager.addParticle(p);
+            }
+        }
 
         schema.init();
 
@@ -63,7 +70,7 @@ public class SimulationManager {
         long current;
         int completed;
         int oldCompleted = 0;
-        while (elapsed < ioManager.getConfiguration().getDuration()) {
+        while (!particleManager.getParticles().isEmpty()) {
             for (final Particle p : particleManager.getParticles())
                 gridManager.addParticle(p, false);
 
@@ -84,16 +91,19 @@ public class SimulationManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                completed = (int) (elapsed/ioManager.getConfiguration().getDuration()*100);
+                completed = ioManager.getConfiguration().getParticleAmount() - particleManager.getParticles().size();
+                completed /= ioManager.getConfiguration().getParticleAmount();
+                completed *= 100D;
 
                 if(completed != oldCompleted) {
                     logger.info("Simulation completed: {}% ({} ms)", completed, current - prev);
                     prev = current;
                     oldCompleted = completed;
                 }
-
             }
         }
+
+        logger.info("Simulation duration: {} ms.", elapsed);
     }
 
     private double calculateKineticEnergy() {

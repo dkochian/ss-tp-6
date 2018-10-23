@@ -21,16 +21,22 @@ public class Particle {
 
     private final Set<Particle> neighbours = new HashSet<>();
 
-     private double forces;
+    private double forces;
+
+    private final double desiredVelocity;
+
+    private Point<Double> goal;
 
     public Particle(int id, Point<Double> position, Point<Double> velocity,
-                    Point<Double> acceleration, double mass, double radius) {
+                    Point<Double> acceleration, double mass, double radius, double desiredVelocity, Point<Double> goal) {
         this.id = id;
         this.position = position;
         this.velocity = velocity;
         this.acceleration = acceleration;
         this.mass = mass;
         this.radius = radius;
+        this.desiredVelocity = desiredVelocity;
+        this.goal = goal;
     }
 
     public static Point<Double> calculateAcceleration(final Particle particle, final Point<Double> forces) {
@@ -116,6 +122,14 @@ public class Particle {
         return forces;
     }
 
+    public double getDesiredVelocity() {
+        return desiredVelocity;
+    }
+
+    public Point<Double> getGoal() {
+        return goal;
+    }
+
     public void setVelocity(final Point<Double> velocity) {
         this.velocity = velocity;
     }
@@ -130,5 +144,9 @@ public class Particle {
 
     public void setForces(double forces) {
         this.forces = forces;
+    }
+
+    public void setGoal(Point<Double> goal) {
+        this.goal = goal;
     }
 }

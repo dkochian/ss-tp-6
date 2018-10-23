@@ -44,7 +44,8 @@ public class InputData {
                     new Range<>(1D, siloDimensions.getY()));
             final SerializableParticle particle = generateParticle(particles.size() + 2, position,
                     ioManager.getConfiguration().getParticleVelocity(), ioManager.getConfiguration().getParticleAcceleration(),
-                    ioManager.getConfiguration().getParticleMass(), ioManager.getConfiguration().getParticleRadius());
+                    ioManager.getConfiguration().getParticleMass(), ioManager.getConfiguration().getParticleRadius(),
+                    ioManager.getConfiguration().getParticleDesiredVelocity());
 
             try {
                 gridManager.addParticle(particle);
@@ -68,7 +69,8 @@ public class InputData {
                     for (int i = 0; i < amount && particles.size() < ioManager.getConfiguration().getParticleAmount(); i++) {
                         final SerializableParticle particle = generateParticle(particles.size() + 2, gridCell.getPosition(),
                                 ioManager.getConfiguration().getParticleVelocity(), ioManager.getConfiguration().getParticleAcceleration(),
-                                ioManager.getConfiguration().getParticleMass(), ioManager.getConfiguration().getParticleRadius());
+                                ioManager.getConfiguration().getParticleMass(), ioManager.getConfiguration().getParticleRadius(),
+                                ioManager.getConfiguration().getParticleDesiredVelocity());
 
                         try {
                             gridManager.addParticle(particle);
@@ -88,7 +90,8 @@ public class InputData {
     
     private static SerializableParticle generateParticle(final int id, final Point<Range<Double>> position,
                                                   Point<Range<Double>> velocity, Point<Range<Double>> acceleration,
-                                                  final Range<Double> mass, final Range<Double> radius) {
+                                                  final Range<Double> mass, final Range<Double> radius,
+                                                         final Range<Double> desiredVelocity) {
         final double posX = (position.getX().getOffset().equals(0D) ? position.getX().getBase() :
                 RandomUtils.nextDouble(position.getX().getBase(), position.getX().getBase()
                         + position.getX().getOffset()));
@@ -111,9 +114,11 @@ public class InputData {
                 RandomUtils.nextDouble(mass.getBase(), mass.getBase() + mass.getOffset()));
         final double r = (radius.getOffset().equals(0D) ? radius.getBase() :
                 RandomUtils.nextDouble(radius.getBase(), radius.getBase() + radius.getOffset()));
+        final double dVelocity = (desiredVelocity.getOffset().equals(0D) ? desiredVelocity.getBase() :
+                RandomUtils.nextDouble(desiredVelocity.getBase(), desiredVelocity.getBase() + desiredVelocity.getOffset()));
 
         return new SerializableParticle(id, new Point<>(posX, posY), new Point<>(velX, velY), new Point<>(accX, accY),
-                m, r);
+                m, r, dVelocity);
     }
 
 }
