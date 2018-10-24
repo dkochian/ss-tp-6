@@ -8,6 +8,8 @@ import ar.edu.itba.ss.utils.other.Tuple;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import java.util.List;
+
 @Singleton
 public class MovementManager {
 
@@ -20,7 +22,7 @@ public class MovementManager {
         this.particleManager = particleManager;
     }
 
-    public boolean updatePosition(final Particle p, final Point<Double> position) {
+    public boolean updatePosition(final Particle p, final Point<Double> position, List<Particle> toRemove) {
         final Tuple<Double, Double> bottom = new Tuple<>(
                 ioManager.getConfiguration().getDimensions().getY() - ioManager.getConfiguration().getTolerance(),
                 ioManager.getConfiguration().getDimensions().getY() + ioManager.getConfiguration().getTolerance());
@@ -29,8 +31,10 @@ public class MovementManager {
 
         Goal currentGoal = p.getCurrentGoal();
 
-        if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom))
-            return particleManager.removeParticle(p);
+        if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom)) {
+            toRemove.add(p);
+            return true;
+        }
         else if (Particle.getDistance(p.getPosition(), currentGoal.getPosition()) <= currentGoal.getRadius())
             p.removeGoal();
 

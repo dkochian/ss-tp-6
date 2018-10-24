@@ -66,7 +66,7 @@ public class ForcesManager {
 
             if (eps > 0) {
                 Point<Double> relativeVelocity = relativeVelocity(p2.getVelocity(), velocity);
-                fN = calculateSpringForce(eps);
+                fN = calculateSpringForce(relativeVelocity, eps, eX, eY);
                 fT = calculateFrictionForce(relativeVelocity, eps, eX, eY);
             }
             else
@@ -86,7 +86,7 @@ public class ForcesManager {
                 double eX = calculateEx(position, collisionPoint);
                 double eY = calculateEy(position, collisionPoint);
                 Point<Double> relativeVelocity = relativeVelocity(new Point<>(0D, 0D), velocity);
-                double fN = calculateSpringForce(eps);
+                double fN = calculateSpringForce(relativeVelocity, eps, eX, eY);
                 double fT = calculateFrictionForce(relativeVelocity, eps, eX, eY);
                 forceX += fN * eX + fT * -eY;
                 forceY += fN * eY + fT * eX;
@@ -117,8 +117,9 @@ public class ForcesManager {
         return radius + radius2 - Particle.getDistance(position2, position);
     }
 
-    private double calculateSpringForce(final double eps) {
-        return -1 * kn * eps;
+    private double calculateSpringForce(final Point<Double> relativeVelocity, final double eps,
+                                        final double eX, final double eY) {
+        return -1 * kn * eps - gamma * scalarProduct(relativeVelocity, normalDirection(eX, eY));
     }
 
     private double calculateFrictionForce(final Point<Double> relativeVelocity, final double eps,
@@ -133,7 +134,7 @@ public class ForcesManager {
     private Point<Double> calculateDesireForce(double mass, Point<Double> velocity,
                                                double desireVelocity, double eX, double eY) {
         return new Point<>((mass / T) * (desireVelocity * eX - velocity.getX()),
-                (mass / T) * (desireVelocity * eY - velocity.getX()));
+                (mass / T) * (desireVelocity * eY - velocity.getY()));
     }
 
     private Point<Double> relativeVelocity(Point<Double> velocity, Point<Double> velocity2) {

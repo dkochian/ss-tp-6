@@ -9,6 +9,8 @@ import ar.edu.itba.ss.managers.ParticleManager;
 import ar.edu.itba.ss.utils.other.Point;
 
 import javax.inject.Inject;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Beeman extends Schema {
 
@@ -28,6 +30,7 @@ public class Beeman extends Schema {
     @Override
     public double updateParticles() {
         final double dt = ioManager.getConfiguration().getDt();
+        final List<Particle> toRemove = new LinkedList<>();
 
         for (Particle particle : particleManager.getParticles()) {
             if (particle.getId() != 0 && particle.getId() != 1)
@@ -36,11 +39,12 @@ public class Beeman extends Schema {
 
         for (Particle particle : particleManager.getParticles()) {
             if(particle.getId() != 0 && particle.getId() != 1
-                    && !movementManager.updatePosition(particle, states.get(particle).getPosition())) {
+                    && !movementManager.updatePosition(particle, states.get(particle).getPosition(), toRemove)) {
                 particle.setVelocity(states.get(particle).getVelocity());
                 particle.setAcceleration(states.get(particle).getAcceleration());
             }
         }
+        particleManager.removeParticles(toRemove);
 
         return dt;
     }

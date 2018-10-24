@@ -20,8 +20,12 @@ public class ParticleManager {
         return Collections.unmodifiableList(particles);
     }
 
-    boolean removeParticle(final Particle p) {
+    public boolean removeParticle(final Particle p) {
         return particles.remove(p);
+    }
+
+    public boolean removeParticles(final List<Particle> toRemove) {
+        return particles.removeAll(toRemove);
     }
 
     public void clearNeighbours() {

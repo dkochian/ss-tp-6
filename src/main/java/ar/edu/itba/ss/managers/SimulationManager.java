@@ -57,7 +57,7 @@ public class SimulationManager {
         //goals
         List<Goal> goals = new LinkedList<>();
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getOpening().getKey() + 0.5), 1.2));
+                ioManager.getConfiguration().getOpening().getKey() + 0.1), 1.2));
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
                 ioManager.getConfiguration().getDimensions().getY()), 0.05));
 

@@ -57,7 +57,7 @@ public class Configuration {
 
         //Input
         generateInput = true;
-        particleAmount = 200;
+        particleAmount = 300;
         maxIterations = 100;
 
         //General
@@ -71,8 +71,8 @@ public class Configuration {
         particleDesiredVelocity = new Range<>(0.8, 5.2);
 
         //Constants
-        kn = 1.2 * Math.pow(10, 5); //N/m
-        kt = 2 * kn;
+        kn = 1.2 * Math.pow(10, 6); //N/m
+        kt = 2.4 * Math.pow(10, 5);
         mu = 0.1;
         gamma = 100; //kg/s
         tolerance = 0.01;
