@@ -123,11 +123,11 @@ public class ForcesManager {
 
     private double calculateFrictionForce(final Point<Double> relativeVelocity, final double eps,
                                           final double eX, final double eY) {
-        return eps * kt * scalarProduct(relativeVelocity, tangentialDirection(eX, eY));
+        return -1 * eps * kt * scalarProduct(relativeVelocity, tangentialDirection(eX, eY));
     }
 
     private double calculateSocialForce(final double overlap){
-        return a * Math.exp(-overlap / b);
+        return -1 * a * Math.exp(-overlap / b);
     }
 
     private Point<Double> calculateDesireForce(double mass, Point<Double> velocity,
