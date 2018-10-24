@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.managers;
 
+import ar.edu.itba.ss.entities.Goal;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.utils.other.Point;
 import ar.edu.itba.ss.utils.other.RandomUtils;
@@ -26,8 +27,12 @@ public class MovementManager {
 
         p.setPosition(new Point<>(position.getX(), position.getY()));
 
+        Goal currentGoal = p.getCurrentGoal();
+
         if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom))
             return particleManager.removeParticle(p);
+        else if (Particle.getDistance(p.getPosition(), currentGoal.getPosition()) <= currentGoal.getRadius())
+            p.removeGoal();
 
         return false;
     }

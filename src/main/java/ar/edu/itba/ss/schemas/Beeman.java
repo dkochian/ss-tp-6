@@ -35,7 +35,8 @@ public class Beeman extends Schema {
         }
 
         for (Particle particle : particleManager.getParticles()) {
-            if(!movementManager.updatePosition(particle, states.get(particle).getPosition())) {
+            if(particle.getId() != 0 && particle.getId() != 1
+                    && !movementManager.updatePosition(particle, states.get(particle).getPosition())) {
                 particle.setVelocity(states.get(particle).getVelocity());
                 particle.setAcceleration(states.get(particle).getAcceleration());
             }

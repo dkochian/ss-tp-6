@@ -3,6 +3,7 @@ package ar.edu.itba.ss.entities;
 import ar.edu.itba.ss.utils.other.Point;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Particle {
@@ -25,10 +26,10 @@ public class Particle {
 
     private final double desiredVelocity;
 
-    private Point<Double> goal;
+    private List<Goal> goals;
 
     public Particle(int id, Point<Double> position, Point<Double> velocity,
-                    Point<Double> acceleration, double mass, double radius, double desiredVelocity, Point<Double> goal) {
+                    Point<Double> acceleration, double mass, double radius, double desiredVelocity, List<Goal> goals) {
         this.id = id;
         this.position = position;
         this.velocity = velocity;
@@ -36,7 +37,7 @@ public class Particle {
         this.mass = mass;
         this.radius = radius;
         this.desiredVelocity = desiredVelocity;
-        this.goal = goal;
+        this.goals = goals;
     }
 
     public static Point<Double> calculateAcceleration(final Particle particle, final Point<Double> forces) {
@@ -126,9 +127,11 @@ public class Particle {
         return desiredVelocity;
     }
 
-    public Point<Double> getGoal() {
-        return goal;
+    public Goal getCurrentGoal() {
+        return goals.get(0);
     }
+
+    public void removeGoal() { goals.remove(0); }
 
     public void setVelocity(final Point<Double> velocity) {
         this.velocity = velocity;
@@ -144,9 +147,5 @@ public class Particle {
 
     public void setForces(double forces) {
         this.forces = forces;
-    }
-
-    public void setGoal(Point<Double> goal) {
-        this.goal = goal;
     }
 }

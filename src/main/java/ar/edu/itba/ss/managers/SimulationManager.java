@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.managers;
 
+import ar.edu.itba.ss.entities.Goal;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.entities.SerializableParticle;
 import ar.edu.itba.ss.schemas.Schema;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SimulationManager {
     private static final Logger logger = LoggerFactory.getLogger(SimulationManager.class);
@@ -51,12 +54,19 @@ public class SimulationManager {
         outputWriter.remove();
         outputWriter.removeKineticEnergyFile();
 
+        //goals
+        List<Goal> goals = new LinkedList<>();
+        goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
+                ioManager.getConfiguration().getOpening().getKey() + 0.5), 1.2));
+        goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
+                ioManager.getConfiguration().getDimensions().getY()), 0.05));
+
         logger.debug("Adding particles");
         for (SerializableParticle p : ioManager.getInputData().getParticles()) {
             if (p.isVerified()) {
                 gridManager.addParticle(p, false);
                 particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
-                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), null));
+                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), new LinkedList<>(goals)));
             } else {
                 gridManager.addParticle(p);
                 particleManager.addParticle(p);

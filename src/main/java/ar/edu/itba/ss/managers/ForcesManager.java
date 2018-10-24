@@ -40,7 +40,7 @@ public class ForcesManager {
     public Point<Double> updateAndCalculateForces(final Particle particle, final Point<Double> position,
                                                   final Point<Double> velocity) {
         final Tuple<Double, Point<Double>> result = calculateForces(position, velocity, particle.getDesiredVelocity(),
-                particle.getNeighbours(), particle.getRadius(), particle.getMass(), particle.getGoal());
+                particle.getNeighbours(), particle.getRadius(), particle.getMass(), particle.getCurrentGoal().getPosition());
 
         particle.setForces(result.getKey());
 
@@ -50,11 +50,11 @@ public class ForcesManager {
     public Tuple<Double, Point<Double>> calculateForces(final Point<Double> position, final Point<Double> velocity,
                                                         final double desireVelocity, final Collection<Particle> neighbours,
                                                         final double radius, final double mass, Point<Double> goal) {
-        //Point<Double> desireForce = calculateDesireForce(mass, velocity, desireVelocity, calculateEx(position,
-        //        goal), calculateEy(position, goal));
+        Point<Double> desireForce = calculateDesireForce(mass, velocity, desireVelocity, calculateEx(position,
+                goal), calculateEy(position, goal));
 
-        double forceX = 0.0; //desireForce.getX()
-        double forceY = 0.0; //desireForce.getY()
+        double forceX = desireForce.getX();
+        double forceY = desireForce.getY();
         double fNTotal = 0D;
 
         for (Particle p2 : neighbours) {
