@@ -57,7 +57,10 @@ public class SimulationManager {
         //goals
         List<Goal> goals = new LinkedList<>();
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getOpening().getKey() + 0.1), 1.2));
+                ioManager.getConfiguration().getOpening().getKey() -
+                        ioManager.getConfiguration().getParticleRadius().getBase()),
+                ioManager.getConfiguration().getOpening().getValue().getOffset()/2 +
+                        ioManager.getConfiguration().getParticleRadius().getBase()/2));
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
                 ioManager.getConfiguration().getDimensions().getY()), 0.05));
 
@@ -80,7 +83,8 @@ public class SimulationManager {
         long current;
         int completed;
         int oldCompleted = 0;
-        while (!particleManager.getParticles().isEmpty()) {
+        while (!particleManager.isEmpty()) {
+
             for (final Particle p : particleManager.getParticles())
                 gridManager.addParticle(p, false);
 
@@ -101,9 +105,9 @@ public class SimulationManager {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                completed = ioManager.getConfiguration().getParticleAmount() - particleManager.getParticles().size();
-                completed /= ioManager.getConfiguration().getParticleAmount();
-                completed *= 100D;
+                completed = ioManager.getConfiguration().getParticleAmount() - (particleManager.getParticles().size() - 2);
+                double aux = (1.0 * completed / ioManager.getConfiguration().getParticleAmount() * 100);
+                completed = (int) aux;
 
                 if(completed != oldCompleted) {
                     logger.info("Simulation completed: {}% ({} ms)", completed, current - prev);

@@ -20,8 +20,6 @@ public class ForcesManager {
     private final double b;
     private final double kt;
     private final double kn;
-    private final double gamma;
-    private final double mu;
     private final double T;
 
     @Inject
@@ -30,8 +28,6 @@ public class ForcesManager {
         this.b = ioManager.getConfiguration().getB();
         this.kt = ioManager.getConfiguration().getKt();
         this.kn = ioManager.getConfiguration().getKn();
-        this.gamma = ioManager.getConfiguration().getGamma();
-        this.mu = ioManager.getConfiguration().getMu();
         this.T = ioManager.getConfiguration().getT();
         this.gridManager = gridManager;
         this.presionConstant = 2 * Math.PI * ioManager.getConfiguration().getInteractionRadius();
@@ -119,7 +115,7 @@ public class ForcesManager {
 
     private double calculateSpringForce(final Point<Double> relativeVelocity, final double eps,
                                         final double eX, final double eY) {
-        return -1 * kn * eps - gamma * scalarProduct(relativeVelocity, normalDirection(eX, eY));
+        return -1 * kn * eps;
     }
 
     private double calculateFrictionForce(final Point<Double> relativeVelocity, final double eps,

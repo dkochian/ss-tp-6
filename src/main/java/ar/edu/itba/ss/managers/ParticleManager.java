@@ -33,8 +33,10 @@ public class ParticleManager {
             p.clearNeighbours();
     }
 
-    void clear(){
+    public void clear(){
         particles.clear();
     }
+
+    public boolean isEmpty() { return particles.size() - 2 == 0; }
 
 }

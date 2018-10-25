@@ -38,8 +38,6 @@ public class Configuration {
     //Constants
     private final double kn;
     private final double kt;
-    private final double mu;
-    private final double gamma;
     private final double tolerance;
     private final double a;
     private final double b;
@@ -57,7 +55,7 @@ public class Configuration {
 
         //Input
         generateInput = true;
-        particleAmount = 300;
+        particleAmount = 200;
         maxIterations = 100;
 
         //General
@@ -71,10 +69,8 @@ public class Configuration {
         particleDesiredVelocity = new Range<>(0.8, 5.2);
 
         //Constants
-        kn = 1.2 * Math.pow(10, 6); //N/m
-        kt = 2.4 * Math.pow(10, 5);
-        mu = 0.1;
-        gamma = 100; //kg/s
+        kn = 4.2 * Math.pow(10, 5); //N/m
+        kt = 1.0 * Math.pow(10, 5);
         tolerance = 0.01;
         a = 2000; //N
         b = 0.08; //m
@@ -114,8 +110,6 @@ public class Configuration {
         this.interactionRadius = interactionRadius;
         this.kn = kn;
         this.kt = kt;
-        this.mu = mu;
-        this.gamma = gamma;
         this.tolerance = tolerance;
         this.a = a;
         this.b = b;
@@ -209,14 +203,6 @@ public class Configuration {
 
     public double getKt() {
         return kt;
-    }
-
-    public double getMu() {
-        return mu;
-    }
-
-    public double getGamma() {
-        return gamma;
     }
 
     public double getTolerance() {
