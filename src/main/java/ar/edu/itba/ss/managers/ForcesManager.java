@@ -62,10 +62,10 @@ public class ForcesManager {
 
             if (eps > 0) {
                 Point<Double> relativeVelocity = relativeVelocity(p2.getVelocity(), velocity);
-                fN = calculateSpringForce(relativeVelocity, eps, eX, eY);
+                fN = calculateSpringForce(eps);
                 fT = calculateFrictionForce(relativeVelocity, eps, eX, eY);
             }
-            else
+            else if (p2.getId() != 0 && p2.getId() != 1)
                 fN = calculateSocialForce(Math.abs(eps));
 
             forceX += fN * eX + fT * -eY;
@@ -82,7 +82,7 @@ public class ForcesManager {
                 double eX = calculateEx(position, collisionPoint);
                 double eY = calculateEy(position, collisionPoint);
                 Point<Double> relativeVelocity = relativeVelocity(new Point<>(0D, 0D), velocity);
-                double fN = calculateSpringForce(relativeVelocity, eps, eX, eY);
+                double fN = calculateSpringForce(eps);
                 double fT = calculateFrictionForce(relativeVelocity, eps, eX, eY);
                 forceX += fN * eX + fT * -eY;
                 forceY += fN * eY + fT * eX;
@@ -113,8 +113,7 @@ public class ForcesManager {
         return radius + radius2 - Particle.getDistance(position2, position);
     }
 
-    private double calculateSpringForce(final Point<Double> relativeVelocity, final double eps,
-                                        final double eX, final double eY) {
+    private double calculateSpringForce(final double eps) {
         return -1 * kn * eps;
     }
 

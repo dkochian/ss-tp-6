@@ -56,13 +56,15 @@ public class SimulationManager {
 
         //goals
         List<Goal> goals = new LinkedList<>();
+        double avgRadius = ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getOffset()/2;
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getOpening().getKey() -
-                        ioManager.getConfiguration().getParticleRadius().getBase()),
-                ioManager.getConfiguration().getOpening().getValue().getOffset()/2 +
-                        ioManager.getConfiguration().getParticleRadius().getBase()/2));
+                ioManager.getConfiguration().getOpening().getKey() - avgRadius),
+                ioManager.getConfiguration().getOpening().getValue().getBase(),
+                ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
+                ioManager.getConfiguration().getOpening().getKey() - avgRadius * 2.1,
+                        ioManager.getConfiguration().getOpening().getKey() + avgRadius * 2.1));
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getDimensions().getY()), 0.05));
+                ioManager.getConfiguration().getDimensions().getY()), 0.01, 0.01, 0.01, 0.01));
 
         logger.debug("Adding particles");
         for (SerializableParticle p : ioManager.getInputData().getParticles()) {

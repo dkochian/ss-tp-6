@@ -35,7 +35,7 @@ public class MovementManager {
             toRemove.add(p);
             return true;
         }
-        else if (Particle.getDistance(p.getPosition(), currentGoal.getPosition()) <= currentGoal.getRadius() - p.getRadius())
+        else if (currentGoal.isReached(position, p.getRadius()))
             p.removeGoal();
 
         return false;

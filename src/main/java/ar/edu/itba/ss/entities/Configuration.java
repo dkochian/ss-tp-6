@@ -39,6 +39,7 @@ public class Configuration {
     private final double kn;
     private final double kt;
     private final double tolerance;
+    private final double openingTolerance;
     private final double a;
     private final double b;
     private final double T;
@@ -69,9 +70,10 @@ public class Configuration {
         particleDesiredVelocity = new Range<>(0.8, 5.2);
 
         //Constants
-        kn = 4.2 * Math.pow(10, 5); //N/m
+        kn = 2.4 * Math.pow(10, 5); //N/m
         kt = 1.0 * Math.pow(10, 5);
         tolerance = 0.01;
+        openingTolerance = 0.10;
         a = 2000; //N
         b = 0.08; //m
         T = 0.5; //s
@@ -89,8 +91,8 @@ public class Configuration {
                          double factor, Point<Double> dimensions, Tuple<Double, Range<Double>> opening,
                          Point<Range<Double>> particleVelocity, Point<Range<Double>> particleAcceleration,
                          Range<Double> particleRadius, Range<Double> particleMass, Range<Double> particleDesiredVelocity,
-                         double dt, double interactionRadius, double kn, double kt, double mu, double gamma,
-                         double tolerance, double a, double b, double t, double compress) {
+                         double dt, double interactionRadius, double kn, double kt, double tolerance, double openingTolerance,
+                         double a, double b, double t, double compress) {
         this.outputDirectory = outputDirectory;
         this.outputSimulationFile = outputSimulationFile;
         this.inputDirectory = inputDirectory;
@@ -111,6 +113,7 @@ public class Configuration {
         this.kn = kn;
         this.kt = kt;
         this.tolerance = tolerance;
+        this.openingTolerance = openingTolerance;
         this.a = a;
         this.b = b;
         T = t;
@@ -208,6 +211,8 @@ public class Configuration {
     public double getTolerance() {
         return tolerance;
     }
+
+    public double getOpeningTolerance() { return openingTolerance; }
 
     public double getA() {
         return a;

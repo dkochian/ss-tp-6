@@ -25,6 +25,8 @@ public class GridManager {
     private final Matrix<List<Particle>> grid;
     private final Set<Point<Integer>> notEmptyCells;
 
+    private final double openingTolerance;
+
     public enum WallType {
         LEFT,
         RIGHT,
@@ -41,12 +43,14 @@ public class GridManager {
 
     public GridManager(final IOManager ioManager, final double maxRadius) {
         this(ioManager.getConfiguration().getDimensions(), ioManager.getConfiguration().getOpening(), maxRadius,
-                ioManager.getConfiguration().getInteractionRadius());
+                ioManager.getConfiguration().getInteractionRadius(), ioManager.getConfiguration().getOpeningTolerance());
     }
 
     public GridManager(final Point<Double> siloDimensions,
                        final Tuple<Double, Range<Double>> opening, final double maxRadius,
-                       final double interactionRadius) {
+                       final double interactionRadius, final double openingTolerance) {
+        this.openingTolerance = openingTolerance;
+
         final double tmp = Math.min(siloDimensions.getX(),
                 siloDimensions.getY());
 
@@ -166,8 +170,8 @@ public class GridManager {
     }
 
     public boolean isParticleXBetweenOpening(final double x, final double radius) {
-        return isParticleBetweenBounds(x, radius, new Tuple<>(opening.getValue().getBase(),
-                opening.getValue().getBase() + opening.getValue().getOffset()));
+        return isParticleBetweenBounds(x, radius, new Tuple<>(opening.getValue().getBase() - openingTolerance,
+                opening.getValue().getBase() + opening.getValue().getOffset() + openingTolerance));
     }
 
     public static boolean isBetweenBounds(final double position, final Tuple<Double, Double> bounds) {

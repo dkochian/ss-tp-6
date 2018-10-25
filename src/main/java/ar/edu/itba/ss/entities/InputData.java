@@ -37,7 +37,7 @@ public class InputData {
                 ioManager.getConfiguration().getOpening().getKey());
 
         final GridManager gridManager = new GridManager(siloDimensions, ioManager.getConfiguration().getOpening(),
-                maxRadius, ioManager.getConfiguration().getInteractionRadius());
+                maxRadius, ioManager.getConfiguration().getInteractionRadius(), ioManager.getConfiguration().getOpeningTolerance());
 
         for (int i = 0; i < ioManager.getConfiguration().getParticleAmount(); i++) {
             final Point<Range<Double>> position = new Point<>(new Range<>(0D, siloDimensions.getX()),
