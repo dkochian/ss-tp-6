@@ -53,8 +53,8 @@ public class SimulationManager {
                 ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0, 0, null));
 
         outputWriter.remove();
-        outputWriter.removeKineticEnergyFile();
         outputWriter.removeParticlesOverOpeningFile();
+        outputWriter.removeDischargeCurve();
 
         //goals
         List<Goal> goals = new LinkedList<>();
@@ -110,7 +110,6 @@ public class SimulationManager {
                 counter++;
                 try {
                     outputWriter.write();
-                    outputWriter.writeKineticEnergy(calculateKineticEnergy(), elapsed);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -126,20 +125,14 @@ public class SimulationManager {
                 }
             }
         }
-        try { outputWriter.writeParticlesOverOpening(particlesExited); }
+        try {
+            List<Double> exitTimes = outputWriter.writeParticlesOverOpening(particlesExited);
+            outputWriter.writeDischargeCurve(exitTimes);
+        }
         catch (Exception e) {}
         logger.info("Simulation duration: {} seconds", elapsed);
     }
-
-    private double calculateKineticEnergy() {
-        double energy = 0;
-        for (Particle particle : particleManager.getParticles())
-            if(particle.getId() != 0 && particle.getId() != 1)
-                energy += 0.5 * particle.getMass() * (Math.pow(particle.getVelocity().getX(), 2) + Math.pow(particle.getVelocity().getY(), 2));
-
-        return energy;
-    }
-
+    
     private void calculateParticlesOverOpening(Map<Particle, Double> particlesExited, double elapsed) {
         for (Particle p : particleManager.getParticles()) {
             if (p.getPosition().getX() > ioManager.getConfiguration().getOpening().getValue().getBase()

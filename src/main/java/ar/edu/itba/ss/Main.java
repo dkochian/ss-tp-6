@@ -12,7 +12,7 @@ public class Main {
         logger.info("Running program");
         long start = System.currentTimeMillis();
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
-        logger.info("Program finished in {} ms", System.currentTimeMillis() - start);
         simulationManager.simulate();
+        logger.info("Program finished in {} ms", System.currentTimeMillis() - start);
     }
 }

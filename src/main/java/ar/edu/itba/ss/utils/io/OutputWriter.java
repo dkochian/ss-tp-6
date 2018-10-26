@@ -68,21 +68,7 @@ public class OutputWriter {
         }
     }
 
-    public void writeKineticEnergy(final double energy, final double elapsed) throws IOException {
-        final String path = ioManager.getConfiguration().getOutputDirectory() + "/kineticEnergy.tsv";
-
-        try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
-            printWriter
-                    .append(String.valueOf(elapsed))
-                    .append("\t")
-                    .append(String.valueOf(energy))
-                    .append("\r\n");
-
-            printWriter.flush();
-        }
-    }
-
-    public void writeParticlesOverOpening(Map<Particle, Double> particlesExited) throws IOException {
+    public List<Double> writeParticlesOverOpening(Map<Particle, Double> particlesExited) throws IOException {
         final String path = ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv";
         List<Double> exitTimes = new LinkedList<>();
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
@@ -96,6 +82,21 @@ public class OutputWriter {
                     .append(String.valueOf(t))
                     .append("\r\n");
 
+            printWriter.flush();
+        }
+        return exitTimes;
+    }
+
+    public void writeDischargeCurve(List<Double> exitTimes) throws IOException {
+        final String path = ioManager.getConfiguration().getOutputDirectory() + "/dischargeCurve.tsv";
+        try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
+            int counter = 0;
+            for (Double t : exitTimes)
+                printWriter
+                        .append(String.valueOf(++counter))
+                        .append("\t")
+                        .append(String.valueOf(t))
+                        .append("\r\n");
             printWriter.flush();
         }
     }
@@ -113,8 +114,8 @@ public class OutputWriter {
         }
     }
 
-    public void removeKineticEnergyFile() {
-        final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/kineticEnergy.tsv");
+    public void removeParticlesOverOpeningFile() {
+        final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv");
 
         if (Files.exists(p)) {
             try {
@@ -125,8 +126,8 @@ public class OutputWriter {
         }
     }
 
-    public void removeParticlesOverOpeningFile() {
-        final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv");
+    public void removeDischargeCurve() {
+        final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/dischargeCurve.tsv");
 
         if (Files.exists(p)) {
             try {
