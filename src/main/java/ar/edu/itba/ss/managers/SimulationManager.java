@@ -61,8 +61,8 @@ public class SimulationManager {
         double avgRadius = ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getOffset()/2;
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
                 ioManager.getConfiguration().getOpening().getKey() - avgRadius),
-                ioManager.getConfiguration().getOpening().getValue().getBase(),
-                ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
+                ioManager.getConfiguration().getOpening().getValue().getBase() - ioManager.getConfiguration().getOpeningTolerance(),
+                ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset() + ioManager.getConfiguration().getOpeningTolerance(),
                 ioManager.getConfiguration().getOpening().getKey() - avgRadius * 2.1,
                         ioManager.getConfiguration().getOpening().getKey() + avgRadius * 2.1));
         goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
@@ -89,6 +89,9 @@ public class SimulationManager {
         long current;
         int completed;
         int oldCompleted = 0;
+
+        logger.info("Starting simulation");
+
         while (!particleManager.isEmpty()) {
 
             for (final Particle p : particleManager.getParticles())

@@ -9,7 +9,10 @@ public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
+        logger.info("Running program");
+        long start = System.currentTimeMillis();
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
+        logger.info("Program finished in {} ms", System.currentTimeMillis() - start);
         simulationManager.simulate();
     }
 }
