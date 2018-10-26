@@ -3,7 +3,6 @@ package ar.edu.itba.ss.managers;
 import ar.edu.itba.ss.entities.Goal;
 import ar.edu.itba.ss.entities.Particle;
 import ar.edu.itba.ss.utils.other.Point;
-import ar.edu.itba.ss.utils.other.RandomUtils;
 import ar.edu.itba.ss.utils.other.Tuple;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -34,10 +33,19 @@ public class MovementManager {
         if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom)) {
             toRemove.add(p);
             return true;
+        } else if (currentGoal.isReached(position, p.getRadius())) {
+            if (position.getY() > ioManager.getConfiguration().getOpening().getKey())
+                p.removeGoal();
+            else
+                p.setGoals(SimulationManager.calculateGoalsForParticle(p.getPosition(), p.getRadius(),
+                        ioManager.getConfiguration().getOpening().getValue().getBase(),
+                        ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
+                        ioManager.getConfiguration().getDimensions().getY(),
+                        ioManager.getConfiguration().getOpeningTolerance(),
+                        ioManager.getConfiguration().getOpening().getKey()));
         }
-        else if (currentGoal.isReached(position, p.getRadius()))
-            p.removeGoal();
 
         return false;
     }
+
 }

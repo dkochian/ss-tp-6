@@ -148,4 +148,8 @@ public class Particle {
     public void setForces(double forces) {
         this.forces = forces;
     }
+
+    public void setGoals(List<Goal> goals) {
+        this.goals = goals;
+    }
 }

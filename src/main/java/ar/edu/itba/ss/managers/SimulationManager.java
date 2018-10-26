@@ -46,34 +46,30 @@ public class SimulationManager {
         final Point<Double> position1 = new Point<>(ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
                 ioManager.getConfiguration().getOpening().getKey());
 
-        particleManager.addParticle(new Particle(0, position0, new Point<>(0.0,0.0), new Point<>(0.0,0.0),
-                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0, 0, null));
+        particleManager.addParticle(new Particle(0, position0, new Point<>(0.0, 0.0), new Point<>(0.0, 0.0),
+                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase()) / 100.0, 0, null));
 
-        particleManager.addParticle(new Particle(1, position1, new Point<>(0.0,0.0), new Point<>(0.0,0.0),
-                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase())/100.0, 0, null));
+        particleManager.addParticle(new Particle(1, position1, new Point<>(0.0, 0.0), new Point<>(0.0, 0.0),
+                ioManager.getConfiguration().getParticleMass().getBase(), (ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getBase()) / 100.0, 0, null));
 
         outputWriter.remove();
         outputWriter.removeParticlesOverOpeningFile();
         outputWriter.removeDischargeCurve();
 
-        //goals
-        List<Goal> goals = new LinkedList<>();
-        double avgRadius = ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getOffset()/2;
-        goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getOpening().getKey() - avgRadius),
-                ioManager.getConfiguration().getOpening().getValue().getBase() - ioManager.getConfiguration().getOpeningTolerance(),
-                ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset() + ioManager.getConfiguration().getOpeningTolerance(),
-                ioManager.getConfiguration().getOpening().getKey() - avgRadius * 2.1,
-                        ioManager.getConfiguration().getOpening().getKey() + avgRadius * 2.1));
-        goals.add(new Goal(new Point<>(ioManager.getConfiguration().getDimensions().getX()/2,
-                ioManager.getConfiguration().getDimensions().getY()), 0.01, 0.01, 0.01, 0.01));
+        double avgRadius = ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getOffset() / 2;
 
         logger.debug("Adding particles");
         for (SerializableParticle p : ioManager.getInputData().getParticles()) {
             if (p.isVerified()) {
                 gridManager.addParticle(p, false);
                 particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
-                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), new LinkedList<>(goals)));
+                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), calculateGoalsForParticle(p.getPosition(), p.getRadius(),
+                        ioManager.getConfiguration().getOpening().getValue().getBase(),
+                        ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
+                        ioManager.getConfiguration().getDimensions().getY(),
+                        ioManager.getConfiguration().getOpeningTolerance(),
+                        ioManager.getConfiguration().getOpening().getKey())));
+
             } else {
                 gridManager.addParticle(p);
                 particleManager.addParticle(p);
@@ -118,7 +114,7 @@ public class SimulationManager {
                 double aux = (1.0 * completed / ioManager.getConfiguration().getParticleAmount() * 100);
                 completed = (int) aux;
 
-                if(completed != oldCompleted) {
+                if (completed != oldCompleted) {
                     logger.info("Simulation completed: {}% ({} ms)", completed, current - prev);
                     prev = current;
                     oldCompleted = completed;
@@ -128,11 +124,11 @@ public class SimulationManager {
         try {
             List<Double> exitTimes = outputWriter.writeParticlesOverOpening(particlesExited);
             outputWriter.writeDischargeCurve(exitTimes);
+        } catch (Exception e) {
         }
-        catch (Exception e) {}
         logger.info("Simulation duration: {} seconds", elapsed);
     }
-    
+
     private void calculateParticlesOverOpening(Map<Particle, Double> particlesExited, double elapsed) {
         for (Particle p : particleManager.getParticles()) {
             if (p.getPosition().getX() > ioManager.getConfiguration().getOpening().getValue().getBase()
@@ -142,5 +138,36 @@ public class SimulationManager {
                 particlesExited.put(p, elapsed);
             }
         }
+    }
+
+    public static List<Goal> calculateGoalsForParticle(final Point<Double> particlePosition, final double radius,
+                                                       final double startOpening, final double finalOpening,
+                                                       final double openingHeight, final double openingTolerance,
+                                                       final double finalYPoint) {
+        List<Goal> goals = new LinkedList<>();
+        if (particlePosition.getX() + radius < startOpening) {
+            goals.add(new Goal(new Point<>(startOpening + radius,
+                    openingHeight),
+                    startOpening - openingTolerance,
+                    finalOpening + openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1));
+        } else if (particlePosition.getX() + radius > finalOpening) {
+            goals.add(new Goal(new Point<>(finalOpening - radius, openingHeight),
+                    startOpening - openingTolerance,
+                    finalOpening + openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1));
+        } else {
+            goals.add(new Goal(new Point<>(particlePosition.getX(), openingHeight),
+                    startOpening - openingTolerance,
+                    finalOpening + openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1));
+        }
+
+        goals.add(new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01));
+
+        return goals;
     }
 }
