@@ -6,14 +6,15 @@ import ar.edu.itba.ss.entities.SerializableParticle;
 import ar.edu.itba.ss.schemas.Schema;
 import ar.edu.itba.ss.utils.io.OutputWriter;
 import ar.edu.itba.ss.utils.other.Point;
-import ar.edu.itba.ss.utils.other.Tuple;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class SimulationManager {
     private static final Logger logger = LoggerFactory.getLogger(SimulationManager.class);
@@ -53,6 +54,7 @@ public class SimulationManager {
 
         outputWriter.remove();
         outputWriter.removeKineticEnergyFile();
+        outputWriter.removeParticlesOverOpeningFile();
 
         //goals
         List<Goal> goals = new LinkedList<>();
@@ -80,6 +82,8 @@ public class SimulationManager {
 
         schema.init();
 
+        Map<Particle, Double> particlesExited = new HashMap<>();
+
         double counter = 1;
         long prev = System.currentTimeMillis();
         long current;
@@ -95,6 +99,8 @@ public class SimulationManager {
             elapsed += schema.updateParticles();
             current = System.currentTimeMillis();
 
+            calculateParticlesOverOpening(particlesExited, elapsed);
+
             gridManager.clear();
 
             if (Double.compare(elapsed, counter * ioManager.getConfiguration().getCompress()) >= 0) {
@@ -102,7 +108,6 @@ public class SimulationManager {
                 try {
                     outputWriter.write();
                     outputWriter.writeKineticEnergy(calculateKineticEnergy(), elapsed);
-                    outputWriter.writeParticlesOverOpening(calculateParticlesOverOpening());
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -118,8 +123,9 @@ public class SimulationManager {
                 }
             }
         }
-
-        logger.info("Simulation duration: {} ms.", elapsed);
+        try { outputWriter.writeParticlesOverOpening(particlesExited); }
+        catch (Exception e) {}
+        logger.info("Simulation duration: {} seconds", elapsed);
     }
 
     private double calculateKineticEnergy() {
@@ -131,14 +137,14 @@ public class SimulationManager {
         return energy;
     }
 
-    private int calculateParticlesOverOpening() {
-        int particlesInInterval = 0;
+    private void calculateParticlesOverOpening(Map<Particle, Double> particlesExited, double elapsed) {
         for (Particle p : particleManager.getParticles()) {
-            if (GridManager.isParticleBetweenBounds(p.getPosition().getY(), p.getRadius(),
-                    new Tuple<>(ioManager.getConfiguration().getOpening().getKey(),
-                            ioManager.getConfiguration().getDimensions().getY())))
-                particlesInInterval++;
+            if (p.getPosition().getX() > ioManager.getConfiguration().getOpening().getValue().getBase()
+                    && p.getPosition().getX() < ioManager.getConfiguration().getOpening().getValue().getBase() +
+                    ioManager.getConfiguration().getOpening().getValue().getOffset()
+                    && Math.abs(p.getPosition().getY() - ioManager.getConfiguration().getOpening().getKey()) < 0.005) {
+                particlesExited.put(p, elapsed);
+            }
         }
-        return particlesInInterval;
     }
 }

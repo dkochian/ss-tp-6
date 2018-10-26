@@ -10,10 +10,6 @@ public class Main {
 
     public static void main(String[] args) {
         final SimulationManager simulationManager = InjectorManager.getInjector().getInstance(SimulationManager.class);
-
-        logger.info("Running simulation...");
-        long start = System.currentTimeMillis();
         simulationManager.simulate();
-        logger.info("Simulation finished in {} ms", System.currentTimeMillis() - start);
     }
 }

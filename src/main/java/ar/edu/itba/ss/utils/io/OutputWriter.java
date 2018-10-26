@@ -11,6 +11,10 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class OutputWriter {
 
@@ -78,12 +82,18 @@ public class OutputWriter {
         }
     }
 
-    public void writeParticlesOverOpening(int particlesOverOpening) throws IOException {
+    public void writeParticlesOverOpening(Map<Particle, Double> particlesExited) throws IOException {
         final String path = ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv";
-
+        List<Double> exitTimes = new LinkedList<>();
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
+            for (Double t : particlesExited.values())
+                exitTimes.add(t);
+
+            Collections.sort(exitTimes);
+
+            for (Double t : exitTimes)
             printWriter
-                    .append(String.valueOf(particlesOverOpening))
+                    .append(String.valueOf(t))
                     .append("\r\n");
 
             printWriter.flush();
@@ -105,6 +115,18 @@ public class OutputWriter {
 
     public void removeKineticEnergyFile() {
         final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/kineticEnergy.tsv");
+
+        if (Files.exists(p)) {
+            try {
+                Files.delete(p);
+            } catch (IOException e) {
+                logger.error(e.getMessage());
+            }
+        }
+    }
+
+    public void removeParticlesOverOpeningFile() {
+        final Path p = Paths.get(ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv");
 
         if (Files.exists(p)) {
             try {
