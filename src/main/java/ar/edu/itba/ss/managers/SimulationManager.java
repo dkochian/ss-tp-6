@@ -67,8 +67,7 @@ public class SimulationManager {
                         ioManager.getConfiguration().getOpening().getValue().getBase(),
                         ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
                         ioManager.getConfiguration().getDimensions().getY(),
-                        ioManager.getConfiguration().getOpeningTolerance(),
-                        ioManager.getConfiguration().getOpening().getKey())));
+                        ioManager.getConfiguration().getOpeningTolerance())));
 
             } else {
                 gridManager.addParticle(p);
@@ -140,31 +139,37 @@ public class SimulationManager {
         }
     }
 
-    public static List<Goal> calculateGoalsForParticle(final Point<Double> particlePosition, final double radius,
+    static List<Goal> calculateGoalsForParticle(final Point<Double> particlePosition, final double radius,
                                                        final double startOpening, final double finalOpening,
-                                                       final double openingHeight, final double openingTolerance,
-                                                       final double finalYPoint) {
+                                                       final double openingHeight, final double openingTolerance) {
         List<Goal> goals = new LinkedList<>();
-        if (particlePosition.getX() + radius < startOpening) {
-            goals.add(new Goal(new Point<>(startOpening + radius,
-                    openingHeight),
-                    startOpening - openingTolerance,
-                    finalOpening + openingTolerance,
+        if (particlePosition.getX() < startOpening) {
+            goals.add(new Goal(new Point<>(startOpening + radius, openingHeight),
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1));
-        } else if (particlePosition.getX() + radius > finalOpening) {
+        } else if (particlePosition.getX() > finalOpening) {
             goals.add(new Goal(new Point<>(finalOpening - radius, openingHeight),
-                    startOpening - openingTolerance,
-                    finalOpening + openingTolerance,
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1));
         } else {
             goals.add(new Goal(new Point<>(particlePosition.getX(), openingHeight),
-                    startOpening - openingTolerance,
-                    finalOpening + openingTolerance,
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1));
         }
+
+        //goals.add(new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01));
+
+        return goals;
+    }
+
+    static List<Goal> calculateFinalGoalForParticle(final Point<Double> particlePosition, final double finalYPoint) {
+        List<Goal> goals = new LinkedList<>();
 
         goals.add(new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01));
 

@@ -67,11 +67,11 @@ public class Configuration {
         particleAcceleration = new Point<>(new Range<>(0D, 0D), new Range<>(0D, 0D));
         particleRadius = new Range<>(0.25, 0.04); // m
         particleMass = new Range<>(80D, 0D); //kg
-        particleDesiredVelocity = new Range<>(0.8, 5.2);
+        particleDesiredVelocity = new Range<>(3.0, 0.0);
 
         //Constants
         kn = 1.2 * Math.pow(10, 5); //N/m
-        kt = kn * 2;
+        kt = 2.4 * Math.pow(10, 5);
         tolerance = 0.01;
         openingTolerance = 0.10;
         a = 2000; //N
