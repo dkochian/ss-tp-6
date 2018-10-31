@@ -83,7 +83,7 @@ public class Configuration {
         interactionRadius = 2 * (particleRadius.getBase() + particleRadius.getOffset());
 
         //Animation
-        compress = 1.0E-2;
+        compress = 0.1;
     }
 
     public Configuration(String outputDirectory, String outputSimulationFile, String inputDirectory,
