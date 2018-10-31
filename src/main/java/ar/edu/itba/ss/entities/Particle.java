@@ -26,10 +26,10 @@ public class Particle {
 
     private final double desiredVelocity;
 
-    private List<Goal> goals;
+    private Goal goal;
 
     public Particle(int id, Point<Double> position, Point<Double> velocity,
-                    Point<Double> acceleration, double mass, double radius, double desiredVelocity, List<Goal> goals) {
+                    Point<Double> acceleration, double mass, double radius, double desiredVelocity, Goal goal) {
         this.id = id;
         this.position = position;
         this.velocity = velocity;
@@ -37,7 +37,7 @@ public class Particle {
         this.mass = mass;
         this.radius = radius;
         this.desiredVelocity = desiredVelocity;
-        this.goals = goals;
+        this.goal = goal;
     }
 
     public static Point<Double> calculateAcceleration(final Particle particle, final Point<Double> forces) {
@@ -128,10 +128,8 @@ public class Particle {
     }
 
     public Goal getCurrentGoal() {
-        return goals.get(0);
+        return goal;
     }
-
-    public void removeGoal() { goals.remove(0); }
 
     public void setVelocity(final Point<Double> velocity) {
         this.velocity = velocity;
@@ -149,7 +147,7 @@ public class Particle {
         this.forces = forces;
     }
 
-    public void setGoals(List<Goal> goals) {
-        this.goals = goals;
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
 }

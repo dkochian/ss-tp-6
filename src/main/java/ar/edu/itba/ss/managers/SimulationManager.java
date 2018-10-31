@@ -56,14 +56,12 @@ public class SimulationManager {
         outputWriter.removeParticlesOverOpeningFile();
         outputWriter.removeDischargeCurve();
 
-        double avgRadius = ioManager.getConfiguration().getParticleRadius().getBase() + ioManager.getConfiguration().getParticleRadius().getOffset() / 2;
-
         logger.debug("Adding particles");
         for (SerializableParticle p : ioManager.getInputData().getParticles()) {
             if (p.isVerified()) {
                 gridManager.addParticle(p, false);
                 particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
-                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), calculateGoalsForParticle(p.getPosition(), p.getRadius(),
+                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), calculateGoalForParticle(p.getPosition(), p.getRadius(),
                         ioManager.getConfiguration().getOpening().getValue().getBase(),
                         ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
                         ioManager.getConfiguration().getDimensions().getY(),
@@ -139,40 +137,31 @@ public class SimulationManager {
         }
     }
 
-    static List<Goal> calculateGoalsForParticle(final Point<Double> particlePosition, final double radius,
-                                                       final double startOpening, final double finalOpening,
-                                                       final double openingHeight, final double openingTolerance) {
-        List<Goal> goals = new LinkedList<>();
+    static Goal calculateGoalForParticle(final Point<Double> particlePosition, final double radius,
+                                         final double startOpening, final double finalOpening,
+                                         final double openingHeight, final double openingTolerance) {
         if (particlePosition.getX() < startOpening) {
-            goals.add(new Goal(new Point<>(startOpening + radius, openingHeight),
+            return new Goal(new Point<>(startOpening + radius, openingHeight),
                     startOpening + openingTolerance,
                     finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1));
+                    openingHeight + radius * 2.1);
         } else if (particlePosition.getX() > finalOpening) {
-            goals.add(new Goal(new Point<>(finalOpening - radius, openingHeight),
+            return new Goal(new Point<>(finalOpening - radius, openingHeight),
                     startOpening + openingTolerance,
                     finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1));
+                    openingHeight + radius * 2.1);
         } else {
-            goals.add(new Goal(new Point<>(particlePosition.getX(), openingHeight),
+            return new Goal(new Point<>(particlePosition.getX(), openingHeight),
                     startOpening + openingTolerance,
                     finalOpening - openingTolerance,
                     openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1));
+                    openingHeight + radius * 2.1);
         }
-
-        //goals.add(new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01));
-
-        return goals;
     }
 
-    static List<Goal> calculateFinalGoalForParticle(final Point<Double> particlePosition, final double finalYPoint) {
-        List<Goal> goals = new LinkedList<>();
-
-        goals.add(new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01));
-
-        return goals;
+    static Goal calculateFinalGoalForParticle(final Point<Double> particlePosition, final double finalYPoint) {
+        return new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01);
     }
 }
