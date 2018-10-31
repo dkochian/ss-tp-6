@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +63,7 @@ public class SimulationManager {
                         p.getMass(), p.getRadius(), p.getDesiredVelocity(), Goal.calculateGoalForParticle(p.getPosition(), p.getRadius(),
                         ioManager.getConfiguration().getOpening().getValue().getBase(),
                         ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
-                        ioManager.getConfiguration().getDimensions().getY(),
+                        ioManager.getConfiguration().getOpening().getKey(),
                         ioManager.getConfiguration().getOpeningTolerance())));
 
             } else {

@@ -33,21 +33,21 @@ public class Goal {
                                          final double startOpening, final double finalOpening,
                                          final double openingHeight, final double openingTolerance) {
         if (particlePosition.getX() < startOpening) {
-            return new Goal(new Point<>(startOpening + radius, openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
+            return new Goal(new Point<>(startOpening + radius, openingHeight - radius),
+                    startOpening - openingTolerance/2,
+                    finalOpening + openingTolerance/2,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1);
         } else if (particlePosition.getX() > finalOpening) {
-            return new Goal(new Point<>(finalOpening - radius, openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
+            return new Goal(new Point<>(finalOpening - radius, openingHeight - radius),
+                    startOpening - openingTolerance/2,
+                    finalOpening + openingTolerance/2,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1);
         } else {
             return new Goal(new Point<>(particlePosition.getX(), openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
+                    startOpening - openingTolerance/2,
+                    finalOpening + openingTolerance/2,
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1);
         }

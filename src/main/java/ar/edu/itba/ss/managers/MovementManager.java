@@ -28,13 +28,11 @@ public class MovementManager {
 
         p.setPosition(new Point<>(position.getX(), position.getY()));
 
-        Goal currentGoal = p.getCurrentGoal();
-
         if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom)) {
             toRemove.add(p);
             return true;
-        } else if (currentGoal.isReached(position, p.getRadius())) {
-                p.setGoal(Goal.calculateFinalGoalForParticle(p.getPosition(), ioManager.getConfiguration().getOpening().getKey()));
+        } else if (p.getCurrentGoal().isReached(position, p.getRadius())) {
+                p.setGoal(Goal.calculateFinalGoalForParticle(p.getPosition(), ioManager.getConfiguration().getDimensions().getY()));
         }
 
         return false;
