@@ -6,51 +6,55 @@ import ar.edu.itba.ss.utils.other.Tuple;
 
 public class Configuration {
 
-    private static final double BOX_HEIGHT = 20D;
-    private static final double BOX_WIDTH = 20D;
-    private static final double BOX_OPENING = 1.2;
+    private static double BOX_HEIGHT = 20D;
+    private static double BOX_WIDTH = 20D;
+    private static double BOX_OPENING = 1.2;
 
     //IO
-    private final String outputDirectory;
-    private final String outputSimulationFile;
-    private final String inputDirectory;
-    private final String inputFilename;
+    private String outputDirectory;
+    private String outputSimulationFile;
+    private String outputSlidingFile;
+    private String outputDischargeFile;
+    private String inputDirectory;
+    private String inputFilename;
 
     //Input
-    private final boolean generateInput;
-    private final int particleAmount;
-    private final int maxIterations;
+    private boolean generateInput;
+    private int particleAmount;
+    private int maxIterations;
 
     //General
-    private final double factor;
-    private final Point<Double> dimensions;
-    private final Tuple<Double, Range<Double>> opening;
-    private final Point<Range<Double>> particleVelocity;
-    private final Point<Range<Double>> particleAcceleration;
-    private final Range<Double> particleRadius;
-    private final Range<Double> particleMass;
-    private final Range<Double> particleDesiredVelocity;
+    private double factor;
+    private Point<Double> dimensions;
+    private Tuple<Double, Range<Double>> opening;
+    private Point<Range<Double>> particleVelocity;
+    private Point<Range<Double>> particleAcceleration;
+    private Range<Double> particleRadius;
+    private Range<Double> particleMass;
+    private Range<Double> particleDesiredVelocity;
 
     //Simulation
-    private final double dt;
-    private final double interactionRadius;
+    private double dt;
+    private double interactionRadius;
 
     //Constants
-    private final double kn;
-    private final double kt;
-    private final double tolerance;
-    private final double openingTolerance;
-    private final double a;
-    private final double b;
-    private final double T;
+    private double kn;
+    private double kt;
+    private double tolerance;
+    private double openingTolerance;
+    private double a;
+    private double b;
+    private double T;
 
     //Animation
-    private final double compress;
+    private double compress;
 
     public Configuration() {
         //IO
         outputDirectory = "output";
         outputSimulationFile = "simulation.tsv";
+        outputSimulationFile = "slidingWindow.tsv";
+        outputDischargeFile = "dischargeCurve.tsv";
         inputDirectory = "input";
         inputFilename = "input.json";
 
@@ -86,15 +90,11 @@ public class Configuration {
         compress = 0.1;
     }
 
-    public Configuration(String outputDirectory, String outputSimulationFile, String inputDirectory,
-                         String inputFilename, boolean generateInput, int particleAmount, int maxIterations,
-                         double factor, Point<Double> dimensions, Tuple<Double, Range<Double>> opening,
-                         Point<Range<Double>> particleVelocity, Point<Range<Double>> particleAcceleration,
-                         Range<Double> particleRadius, Range<Double> particleMass, Range<Double> particleDesiredVelocity,
-                         double dt, double interactionRadius, double kn, double kt, double tolerance, double openingTolerance,
-                         double a, double b, double t, double compress) {
+    public Configuration(String outputDirectory, String outputSimulationFile, String outputSlidingFile, String outputDischargeFile, String inputDirectory, String inputFilename, boolean generateInput, int particleAmount, int maxIterations, double factor, Point<Double> dimensions, Tuple<Double, Range<Double>> opening, Point<Range<Double>> particleVelocity, Point<Range<Double>> particleAcceleration, Range<Double> particleRadius, Range<Double> particleMass, Range<Double> particleDesiredVelocity, double dt, double interactionRadius, double kn, double kt, double tolerance, double openingTolerance, double a, double b, double t, double compress) {
         this.outputDirectory = outputDirectory;
         this.outputSimulationFile = outputSimulationFile;
+        this.outputSlidingFile = outputSlidingFile;
+        this.outputDischargeFile = outputDischargeFile;
         this.inputDirectory = inputDirectory;
         this.inputFilename = inputFilename;
         this.generateInput = generateInput;
@@ -124,109 +124,239 @@ public class Configuration {
         return BOX_HEIGHT;
     }
 
+    public static void setBoxHeight(double boxHeight) {
+        BOX_HEIGHT = boxHeight;
+    }
+
     public static double getBoxWidth() {
         return BOX_WIDTH;
+    }
+
+    public static void setBoxWidth(double boxWidth) {
+        BOX_WIDTH = boxWidth;
     }
 
     public static double getBoxOpening() {
         return BOX_OPENING;
     }
 
+    public static void setBoxOpening(double boxOpening) {
+        BOX_OPENING = boxOpening;
+    }
+
     public String getOutputDirectory() {
         return outputDirectory;
+    }
+
+    public void setOutputDirectory(String outputDirectory) {
+        this.outputDirectory = outputDirectory;
     }
 
     public String getOutputSimulationFile() {
         return outputSimulationFile;
     }
 
+    public void setOutputSimulationFile(String outputSimulationFile) {
+        this.outputSimulationFile = outputSimulationFile;
+    }
+
+    public String getOutputSlidingFile() {
+        return outputSlidingFile;
+    }
+
+    public void setOutputSlidingFile(String outputSlidingFile) {
+        this.outputSlidingFile = outputSlidingFile;
+    }
+
+    public String getOutputDischargeFile() {
+        return outputDischargeFile;
+    }
+
+    public void setOutputDischargeFile(String outputDischargeFile) {
+        this.outputDischargeFile = outputDischargeFile;
+    }
+
     public String getInputDirectory() {
         return inputDirectory;
+    }
+
+    public void setInputDirectory(String inputDirectory) {
+        this.inputDirectory = inputDirectory;
     }
 
     public String getInputFilename() {
         return inputFilename;
     }
 
+    public void setInputFilename(String inputFilename) {
+        this.inputFilename = inputFilename;
+    }
+
     public boolean isGenerateInput() {
         return generateInput;
+    }
+
+    public void setGenerateInput(boolean generateInput) {
+        this.generateInput = generateInput;
     }
 
     public int getParticleAmount() {
         return particleAmount;
     }
 
+    public void setParticleAmount(int particleAmount) {
+        this.particleAmount = particleAmount;
+    }
+
     public int getMaxIterations() {
         return maxIterations;
+    }
+
+    public void setMaxIterations(int maxIterations) {
+        this.maxIterations = maxIterations;
     }
 
     public double getFactor() {
         return factor;
     }
 
+    public void setFactor(double factor) {
+        this.factor = factor;
+    }
+
     public Point<Double> getDimensions() {
         return dimensions;
+    }
+
+    public void setDimensions(Point<Double> dimensions) {
+        this.dimensions = dimensions;
     }
 
     public Tuple<Double, Range<Double>> getOpening() {
         return opening;
     }
 
+    public void setOpening(Tuple<Double, Range<Double>> opening) {
+        this.opening = opening;
+    }
+
     public Point<Range<Double>> getParticleVelocity() {
         return particleVelocity;
+    }
+
+    public void setParticleVelocity(Point<Range<Double>> particleVelocity) {
+        this.particleVelocity = particleVelocity;
     }
 
     public Point<Range<Double>> getParticleAcceleration() {
         return particleAcceleration;
     }
 
+    public void setParticleAcceleration(Point<Range<Double>> particleAcceleration) {
+        this.particleAcceleration = particleAcceleration;
+    }
+
     public Range<Double> getParticleRadius() {
         return particleRadius;
+    }
+
+    public void setParticleRadius(Range<Double> particleRadius) {
+        this.particleRadius = particleRadius;
     }
 
     public Range<Double> getParticleMass() {
         return particleMass;
     }
 
+    public void setParticleMass(Range<Double> particleMass) {
+        this.particleMass = particleMass;
+    }
+
     public Range<Double> getParticleDesiredVelocity() {
         return particleDesiredVelocity;
+    }
+
+    public void setParticleDesiredVelocity(Range<Double> particleDesiredVelocity) {
+        this.particleDesiredVelocity = particleDesiredVelocity;
     }
 
     public double getDt() {
         return dt;
     }
 
+    public void setDt(double dt) {
+        this.dt = dt;
+    }
+
     public double getInteractionRadius() {
         return interactionRadius;
+    }
+
+    public void setInteractionRadius(double interactionRadius) {
+        this.interactionRadius = interactionRadius;
     }
 
     public double getKn() {
         return kn;
     }
 
+    public void setKn(double kn) {
+        this.kn = kn;
+    }
+
     public double getKt() {
         return kt;
+    }
+
+    public void setKt(double kt) {
+        this.kt = kt;
     }
 
     public double getTolerance() {
         return tolerance;
     }
 
-    public double getOpeningTolerance() { return openingTolerance; }
+    public void setTolerance(double tolerance) {
+        this.tolerance = tolerance;
+    }
+
+    public double getOpeningTolerance() {
+        return openingTolerance;
+    }
+
+    public void setOpeningTolerance(double openingTolerance) {
+        this.openingTolerance = openingTolerance;
+    }
 
     public double getA() {
         return a;
+    }
+
+    public void setA(double a) {
+        this.a = a;
     }
 
     public double getB() {
         return b;
     }
 
+    public void setB(double b) {
+        this.b = b;
+    }
+
     public double getT() {
         return T;
     }
 
+    public void setT(double t) {
+        T = t;
+    }
+
     public double getCompress() {
         return compress;
+    }
+
+    public void setCompress(double compress) {
+        this.compress = compress;
     }
 }

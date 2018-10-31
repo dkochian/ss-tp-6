@@ -69,7 +69,8 @@ public class OutputWriter {
     }
 
     public List<Double> writeParticlesOverOpening(Map<Particle, Double> particlesExited) throws IOException {
-        final String path = ioManager.getConfiguration().getOutputDirectory() + "/slidingWindow.tsv";
+        final String path = ioManager.getConfiguration().getOutputDirectory() + "/"
+                + ioManager.getConfiguration().getOutputSlidingFile();
         List<Double> exitTimes = new LinkedList<>();
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
             for (Double t : particlesExited.values())
@@ -88,7 +89,8 @@ public class OutputWriter {
     }
 
     public void writeDischargeCurve(List<Double> exitTimes) throws IOException {
-        final String path = ioManager.getConfiguration().getOutputDirectory() + "/dischargeCurve.tsv";
+        final String path = ioManager.getConfiguration().getOutputDirectory() + "/"
+                + ioManager.getConfiguration().getOutputDischargeFile();
         try (final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(path, true)))) {
             int counter = 0;
             for (Double t : exitTimes)

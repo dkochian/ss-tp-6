@@ -2,8 +2,6 @@ package ar.edu.itba.ss.managers;
 
 import ar.edu.itba.ss.entities.Configuration;
 import ar.edu.itba.ss.entities.InputData;
-import ar.edu.itba.ss.entities.Particle;
-import ar.edu.itba.ss.entities.SerializableParticle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
@@ -69,9 +67,9 @@ public class IOManager {
         return inputData;
     }
 
-    void reload() {
-        inputData = null;
-        configuration = null;
+    public void reloadInput() {
+        logger.info("Reloading Input Data...");
+        inputData = InputData.generate(this);
     }
 
     public static <T> T read(final String filename, Class<T> clazz) throws IOException {

@@ -169,9 +169,9 @@ public class GridManager {
         return position + radius < bounds.getValue() && position - radius > bounds.getKey();
     }
 
-    public boolean isParticleXBetweenOpening(final double x, final double radius) {
-        return isParticleBetweenBounds(x, radius, new Tuple<>(opening.getValue().getBase() - openingTolerance,
-                opening.getValue().getBase() + opening.getValue().getOffset() + openingTolerance));
+    public boolean isParticleXBetweenOpening(final double x) {
+        return isParticleBetweenBounds(x, 0D, new Tuple<>(opening.getValue().getBase(),
+                opening.getValue().getBase() + opening.getValue().getOffset()));
     }
 
     public static boolean isBetweenBounds(final double position, final Tuple<Double, Double> bounds) {

@@ -73,7 +73,7 @@ public class ForcesManager {
             fNTotal += Math.abs(fN);
         }
         for (GridManager.WallType w : GridManager.WallType.values()) {
-            if (w.equals(GridManager.WallType.BOTTOM) && gridManager.isParticleXBetweenOpening(position.getX(), radius))
+            if (w.equals(GridManager.WallType.BOTTOM) && gridManager.isParticleXBetweenOpening(position.getX()))
                 continue;
 
             Point<Double> collisionPoint = gridManager.collisionPoint(position, w);
