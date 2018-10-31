@@ -28,4 +28,32 @@ public class Goal {
         return GridManager.isParticleBetweenBounds(position.getX(), radius, new Tuple<>(x1, x2))
         && GridManager.isParticleBetweenBounds(position.getY(), radius, new Tuple<>(y1, y2));
     }
+
+    public static Goal calculateGoalForParticle(final Point<Double> particlePosition, final double radius,
+                                         final double startOpening, final double finalOpening,
+                                         final double openingHeight, final double openingTolerance) {
+        if (particlePosition.getX() < startOpening) {
+            return new Goal(new Point<>(startOpening + radius, openingHeight),
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1);
+        } else if (particlePosition.getX() > finalOpening) {
+            return new Goal(new Point<>(finalOpening - radius, openingHeight),
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1);
+        } else {
+            return new Goal(new Point<>(particlePosition.getX(), openingHeight),
+                    startOpening + openingTolerance,
+                    finalOpening - openingTolerance,
+                    openingHeight - radius * 2.1,
+                    openingHeight + radius * 2.1);
+        }
+    }
+
+    public static Goal calculateFinalGoalForParticle(final Point<Double> particlePosition, final double finalYPoint) {
+        return new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01);
+    }
 }

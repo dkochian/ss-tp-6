@@ -14,7 +14,7 @@ public class SerializableParticle extends Particle {
     }
 
     public SerializableParticle(int id, Point<Double> position, Point<Double> velocity, Point<Double> acceleration,
-                                double mass, double radius, double desiredVelocity, List<Goal> goal,
+                                double mass, double radius, double desiredVelocity, Goal goal,
                                 boolean verified) {
         super(id, position, velocity, acceleration, mass, radius, desiredVelocity, goal);
         this.verified = verified;

@@ -35,9 +35,9 @@ public class MovementManager {
             return true;
         } else if (currentGoal.isReached(position, p.getRadius())) {
             if (position.getY() > ioManager.getConfiguration().getOpening().getKey()) {
-                p.setGoal(SimulationManager.calculateFinalGoalForParticle(p.getPosition(), ioManager.getConfiguration().getOpening().getKey()));
+                p.setGoal(Goal.calculateFinalGoalForParticle(p.getPosition(), ioManager.getConfiguration().getOpening().getKey()));
             }else {
-                p.setGoal(SimulationManager.calculateGoalForParticle(p.getPosition(), p.getRadius(),
+                p.setGoal(Goal.calculateGoalForParticle(p.getPosition(), p.getRadius(),
                         ioManager.getConfiguration().getOpening().getValue().getBase(),
                         ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
                         ioManager.getConfiguration().getDimensions().getY(),

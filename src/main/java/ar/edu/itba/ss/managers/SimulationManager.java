@@ -61,7 +61,7 @@ public class SimulationManager {
             if (p.isVerified()) {
                 gridManager.addParticle(p, false);
                 particleManager.addParticle(new Particle(p.getId(), p.getPosition(), p.getVelocity(), p.getAcceleration(),
-                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), calculateGoalForParticle(p.getPosition(), p.getRadius(),
+                        p.getMass(), p.getRadius(), p.getDesiredVelocity(), Goal.calculateGoalForParticle(p.getPosition(), p.getRadius(),
                         ioManager.getConfiguration().getOpening().getValue().getBase(),
                         ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
                         ioManager.getConfiguration().getDimensions().getY(),
@@ -135,33 +135,5 @@ public class SimulationManager {
                 particlesExited.put(p, elapsed);
             }
         }
-    }
-
-    static Goal calculateGoalForParticle(final Point<Double> particlePosition, final double radius,
-                                         final double startOpening, final double finalOpening,
-                                         final double openingHeight, final double openingTolerance) {
-        if (particlePosition.getX() < startOpening) {
-            return new Goal(new Point<>(startOpening + radius, openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
-                    openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1);
-        } else if (particlePosition.getX() > finalOpening) {
-            return new Goal(new Point<>(finalOpening - radius, openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
-                    openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1);
-        } else {
-            return new Goal(new Point<>(particlePosition.getX(), openingHeight),
-                    startOpening + openingTolerance,
-                    finalOpening - openingTolerance,
-                    openingHeight - radius * 2.1,
-                    openingHeight + radius * 2.1);
-        }
-    }
-
-    static Goal calculateFinalGoalForParticle(final Point<Double> particlePosition, final double finalYPoint) {
-        return new Goal(new Point<>(particlePosition.getX(), finalYPoint), 0.01, 0.01, 0.01, 0.01);
     }
 }
