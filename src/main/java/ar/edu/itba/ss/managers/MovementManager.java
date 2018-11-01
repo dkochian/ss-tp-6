@@ -31,11 +31,22 @@ public class MovementManager {
         if (GridManager.isBetweenBounds(position.getY() + p.getRadius(), bottom)) {
             toRemove.add(p);
             return true;
-        } else if (p.getCurrentGoal().isReached(position, p.getRadius())) {
+        } else if (p.getCurrentGoal().isReached(position, p.getRadius()) || position.getY() - p.getRadius() > ioManager.getConfiguration().getOpening().getKey()) {
                 p.setGoal(Goal.calculateFinalGoalForParticle(p.getPosition(), ioManager.getConfiguration().getDimensions().getY()));
         }
+        else {
+            Goal openingGoal = Goal.calculateGoalForParticle(p.getPosition(), p.getRadius(),
+                    ioManager.getConfiguration().getOpening().getValue().getBase(),
+                    ioManager.getConfiguration().getOpening().getValue().getBase() + ioManager.getConfiguration().getOpening().getValue().getOffset(),
+                    ioManager.getConfiguration().getOpening().getKey(),
+                    ioManager.getConfiguration().getOpeningTolerance());
 
-        return false;
+            if (position.getY() - p.getRadius() < ioManager.getConfiguration().getOpening().getKey() &&
+                    !openingGoal.isReached(position, p.getRadius())
+                    && p.getCurrentGoal().getPosition().getY() > ioManager.getConfiguration().getOpening().getKey())
+                p.setGoal(openingGoal);
+        }
+                return false;
     }
 
 }

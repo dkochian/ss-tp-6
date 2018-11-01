@@ -22,7 +22,7 @@ public class Point<T> {
 
     @Override
     public String toString() {
-        return "Point {x=" + x + ", y=" + y + "}";
+        return x + "\t" + y;
     }
 
     @Override

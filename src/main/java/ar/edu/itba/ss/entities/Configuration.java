@@ -70,7 +70,7 @@ public class Configuration {
         particleDesiredVelocity = new Range<>(3.0, 0.0);
 
         //Constants
-        kn = 1.2 * Math.pow(10, 5); //N/m
+        kn = 2.4 * Math.pow(10, 5); //N/m
         kt = 2.4 * Math.pow(10, 5);
         tolerance = 0.01;
         openingTolerance = 0.10;

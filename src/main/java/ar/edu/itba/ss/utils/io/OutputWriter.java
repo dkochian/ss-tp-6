@@ -60,6 +60,8 @@ public class OutputWriter {
                         .append(String.valueOf(particle.getId()))
                         .append('\t')
                         .append(String.valueOf(particle.getForces()))
+                        .append('\t')
+                        .append(String.valueOf(particle.getCurrentGoal() != null? particle.getCurrentGoal().getPosition() : "-1\t-1"))
                         .append("\r\n");
 
             //Print silo structure here

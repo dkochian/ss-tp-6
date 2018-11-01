@@ -32,7 +32,7 @@ public class Goal {
     public static Goal calculateGoalForParticle(final Point<Double> particlePosition, final double radius,
                                          final double startOpening, final double finalOpening,
                                          final double openingHeight, final double openingTolerance) {
-        if (particlePosition.getX() < startOpening) {
+        if (particlePosition.getX()  < startOpening) {
             return new Goal(new Point<>(startOpening + radius, openingHeight - radius),
                     startOpening - openingTolerance/2,
                     finalOpening + openingTolerance/2,
@@ -45,7 +45,16 @@ public class Goal {
                     openingHeight - radius * 2.1,
                     openingHeight + radius * 2.1);
         } else {
-            return new Goal(new Point<>(particlePosition.getX(), openingHeight),
+            double goalX;
+            double middlePosX = startOpening + (finalOpening - startOpening)/2;
+            if (particlePosition.getX() - middlePosX < 0)
+                goalX = radius;
+            else
+                goalX = - radius;
+
+            goalX += particlePosition.getX();
+
+            return new Goal(new Point<>(goalX, openingHeight),
                     startOpening - openingTolerance/2,
                     finalOpening + openingTolerance/2,
                     openingHeight - radius * 2.1,
