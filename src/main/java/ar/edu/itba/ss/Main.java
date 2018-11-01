@@ -44,7 +44,7 @@ public class Main {
             final double desiredVelocity = desiredVelocities.get(i).getDesiredVelocity();
             final int runs = desiredVelocities.get(i).getRuns();
             configuration.setParticleDesiredVelocity(new Range<>(desiredVelocity, 0.0));
-            configuration.setParticleAmount(i + 1);
+            configuration.setParticleAmount(200);
             for (int j = 0; j < runs; j++) {
                 final int id = desiredVelocities.get(i).getId() + j;
                 configuration.setOutputSimulationFile("simulation-vel-" + desiredVelocity + "-iter-" + id + ".tsv");
