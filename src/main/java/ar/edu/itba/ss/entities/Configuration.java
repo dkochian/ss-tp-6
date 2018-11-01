@@ -53,7 +53,7 @@ public class Configuration {
         //IO
         outputDirectory = "output";
         outputSimulationFile = "simulation.tsv";
-        outputSimulationFile = "slidingWindow.tsv";
+        outputSlidingFile = "slidingWindow.tsv";
         outputDischargeFile = "dischargeCurve.tsv";
         inputDirectory = "input";
         inputFilename = "input.json";
