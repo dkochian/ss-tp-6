@@ -25,9 +25,14 @@ public class Main {
         Configuration configuration = ioManager.getConfiguration();
 
         final List<Run> desiredVelocities = new ArrayList<>();
-        //Mati runStart = 0, juan = 3, kochi = 7
-        final int runStart = 0;
-        final int runEnd = runStart + 3;
+        //Mati runStart = 0, juan = 3, kochi = 7, special = 11
+        final int runStart = 10;
+        int runEnd;
+
+        if(runStart == 10)
+            runEnd = runStart + 1;
+        else
+            runEnd = runStart + 3;
 
         desiredVelocities.add(0, new Run(0.8, 3, 0));
         desiredVelocities.add(1, new Run(1.6, 3, 0));
@@ -39,12 +44,13 @@ public class Main {
         desiredVelocities.add(7, new Run(4.8, 2, 1));
         desiredVelocities.add(8, new Run(5.6, 3, 0));
         desiredVelocities.add(9, new Run(6.0, 3, 0));
+        desiredVelocities.add(10, new Run(2.0, 3, 0));
 
         for (int i = runStart; i < runEnd; i++) {
             final double desiredVelocity = desiredVelocities.get(i).getDesiredVelocity();
             final int runs = desiredVelocities.get(i).getRuns();
             configuration.setParticleDesiredVelocity(new Range<>(desiredVelocity, 0.0));
-            configuration.setParticleAmount(200);
+            configuration.setParticleAmount(2);
             for (int j = 0; j < runs; j++) {
                 final int id = desiredVelocities.get(i).getId() + j;
                 configuration.setOutputSimulationFile("simulation-vel-" + desiredVelocity + "-iter-" + id + ".tsv");
